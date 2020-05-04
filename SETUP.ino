@@ -29,19 +29,12 @@ void setup() {
   }
   oled.println("Si7021 ok");
 
-  if (!bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID)) {
-    Serial.println("BMP280 failed!");
-    oled.println("BMP280 failed!");
-    while(1);
-  }
+  bmp280.begin();
   oled.println("BMP280 ok");
   
-  bmp.setSampling(Adafruit_BMP280::MODE_FORCED,       // Operating Mode. 
-                  Adafruit_BMP280::SAMPLING_NONE,       // Temp. oversampling 
-                  Adafruit_BMP280::SAMPLING_NONE,       // Pressure oversampling 
-                  Adafruit_BMP280::FILTER_OFF,        // Filtering. 
-                  Adafruit_BMP280::STANDBY_MS_4000);  // Standby time. 
-
+  bmp280.setPresOversampling(OVERSAMPLING_X1);
+  bmp280.setTempOversampling(OVERSAMPLING_X1);
+  bmp280.setIIRFilter(IIR_FILTER_2);
   oled.println("BMP280 sampling ok");
 
   delay(3000);

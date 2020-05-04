@@ -1,19 +1,21 @@
 void takeMeasurements() {
+  bmp280.startForcedConversion();
+
+  latest.humidity = si.readHumidity();
+  
   if (ccs.available()) {
-    bmp.takeForcedMeasurement();
-    if (si.readTemperature() < bmp.readTemperature()) { // read lowest temperature
-      latest.temperature = si.readTemperature();
-    } else {
-      latest.temperature = bmp.readTemperature();
-    }
-    latest.humidity = si.readHumidity();
-    latest.pressure = bmp.seaLevelForAltitude(altitude, bmp.readPressure() / 100.0F);
     if (measuringTVOC && !ccs.readData()) { // start measuring after first loop (cca 20min) of counter because sensor neet time to stabilise
       latest.eco2 = ccs.geteCO2();
       latest.tvoc = ccs.getTVOC();
     }
-    printToSerial();
   }
+
+  if (bmp280.getMeasurements(temperature, pressure, altitudeMeasure)) {
+    latest.temperature = temperature;
+    latest.pressure = pressure / pow(1.0 - (altitude / 44330.0), 5.255);
+  }
+
+  printToSerial();
 }
 
 void readBattery() {

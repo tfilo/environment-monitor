@@ -5,9 +5,10 @@
 #include "avr/power.h"
 #include "EEPROM.h"
 
+#include "BMP280_DEV.h"
+
 #include "Adafruit_CCS811.h"
 #include "Adafruit_Si7021.h"
-#include "Adafruit_BMP280.h"
 
 #include "SSD1306Ascii.h"
 #include "SSD1306AsciiAvrI2c.h"
@@ -55,7 +56,7 @@
 // DEVICES
 Adafruit_CCS811 ccs;
 Adafruit_Si7021 si = Adafruit_Si7021();
-Adafruit_BMP280 bmp;
+BMP280_DEV bmp280;
 SSD1306AsciiAvrI2c oled;
 
 // VARIABLES
@@ -70,6 +71,8 @@ short altitudeSetting;
 unsigned char actualScreen = 0; // actual screen where we are
 unsigned char screenPosition = 0; // position in actual screen
 float voltage = 0;
+
+float temperature, pressure, altitudeMeasure; 
 
 struct data
 {

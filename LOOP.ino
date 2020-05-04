@@ -53,7 +53,7 @@ void loop() {
   delay(1);
   
   if ((millis() - lastBtnPress) < sleepAfter) {
-    LowPower.powerDown(SLEEP_120MS, ADC_OFF, BOD_OFF);
+    LowPower.powerDown(SLEEP_60MS, ADC_OFF, BOD_OFF);
   } else {
     putToSleep();
   }
