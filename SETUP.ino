@@ -1,10 +1,10 @@
-void setup() {  
+void setup() {
   latest.eco2 = DEFAULT_DATA_VALUE;
   latest.tvoc = DEFAULT_DATA_VALUE;
   latest.temperature = DEFAULT_DATA_VALUE;
   latest.humidity = DEFAULT_DATA_VALUE;
   latest.pressure = DEFAULT_DATA_VALUE;
-  
+
   Serial.begin(115200);
 
   initOled();
@@ -14,7 +14,7 @@ void setup() {
   if (!ccs.begin()) {
     Serial.println("CCS811 failed!");
     oled.println("CCS811 failed!");
-    while(1);
+    while (1);
   }
   ccs.enableInterrupt();
   oled.println("CCS811 ok");
@@ -25,17 +25,18 @@ void setup() {
   if (!si.begin()) {
     Serial.println("Si7021 failed!");
     oled.println("Si7021 failed!");
-    while(1);
+    while (1);
   }
   oled.println("Si7021 ok");
 
-  bmp280.begin();
+  if (!bmp280.initialize()) {
+    Serial.println("BMP280 failed!");
+    oled.println("BMP280 failed!");
+    while (1);
+  }
+
+  bmp280.setEnabled(0);
   oled.println("BMP280 ok");
-  
-  bmp280.setPresOversampling(OVERSAMPLING_X1);
-  bmp280.setTempOversampling(OVERSAMPLING_X1);
-  bmp280.setIIRFilter(IIR_FILTER_2);
-  oled.println("BMP280 sampling ok");
 
   delay(3000);
   oled.clear();
@@ -67,7 +68,7 @@ void loadEEPROMvariables() {
   if ((255 ^ sleepByte) != sleepByteXor) { // if checksum (xor) value is not valid, set default
     sleepByte = 2;
   }
-  
+
   switch (sleepByte) {
     case 1:
       sleepAfter = 15000;
@@ -84,12 +85,12 @@ void loadEEPROMvariables() {
     default:
       sleepAfter = DEFAULT_SLEEP;
       break;
-  } 
+  }
 
   short altitudeCheck;
   EEPROM.get(ALTITUDE_EEPROM_ADDR, altitude);
   EEPROM.get(ALTITUDE_EEPROM_ADDR + 2, altitudeCheck);
-  
+
   if ((32767 ^ altitude) != altitudeCheck) {
     altitude = DEFAULT_ALTITUDE;
   }

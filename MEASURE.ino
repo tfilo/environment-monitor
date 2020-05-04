@@ -1,6 +1,4 @@
 void takeMeasurements() {
-  bmp280.startForcedConversion();
-
   latest.humidity = si.readHumidity();
   
   if (ccs.available()) {
@@ -10,11 +8,13 @@ void takeMeasurements() {
     }
   }
 
-  if (bmp280.getMeasurements(temperature, pressure, altitudeMeasure)) {
-    latest.temperature = temperature;
-    latest.pressure = pressure / pow(1.0 - (altitude / 44330.0), 5.255);
-  }
-
+  bmp280.triggerMeasurement();
+  bmp280.awaitMeasurement();
+  bmp280.getTemperature(temperature);
+  bmp280.getPressure(pressure);
+  latest.temperature = temperature;
+  latest.pressure = (pressure / 100) / pow(1.0 - (altitude / 44330.0), 5.255);
+    
   printToSerial();
 }
 

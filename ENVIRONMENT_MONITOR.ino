@@ -5,7 +5,8 @@
 #include "avr/power.h"
 #include "EEPROM.h"
 
-#include "BMP280_DEV.h"
+#include "i2c.h"
+#include "i2c_BMP280.h"
 
 #include "Adafruit_CCS811.h"
 #include "Adafruit_Si7021.h"
@@ -56,7 +57,7 @@
 // DEVICES
 Adafruit_CCS811 ccs;
 Adafruit_Si7021 si = Adafruit_Si7021();
-BMP280_DEV bmp280;
+BMP280 bmp280;
 SSD1306AsciiAvrI2c oled;
 
 // VARIABLES
