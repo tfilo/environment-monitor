@@ -64,6 +64,13 @@ void mainScreen() {
     oled.print("V");
     oled.clearToEOL ();
   }
+  /* 
+    oled.setRow(row++);
+    oled.setCol(1);
+    oled.print("ms: ");
+    oled.print(millis());
+    oled.clearToEOL ();
+  */   
 }
 
 void menuScreen() {
@@ -91,6 +98,16 @@ void menuScreen() {
     oled.print(" ");
   }
   oled.print("Nadmorska vyska");
+  oled.clearToEOL ();
+
+  oled.setRow(row++);
+  oled.setCol(1);
+  if (screenPosition == MENU_BASELINE_POSITION) {
+    oled.print("*");
+  } else {
+    oled.print(" ");
+  }
+  oled.print("CCS811 Baseline");
   oled.clearToEOL ();
 
   oled.setRow(row++);
@@ -148,5 +165,39 @@ void altitudeScreen() {
       oled.print("   ^");
       break;
   }
+  oled.clearToEOL ();
+}
+
+void baselineScreen() {
+  int row = 1;
+  oled.setRow(row++);
+  oled.setCol(1);
+  oled.print("Baseline");
+  oled.clearToEOL ();
+
+  oled.setRow(row++);
+  oled.setCol(1);
+  oled.print("H:uloz, D:obnov");
+  oled.clearToEOL ();
+  
+  oled.setRow(row++);
+  oled.setCol(1);
+  oled.print("Aktualna hodnota:");
+  oled.clearToEOL ();
+  
+  oled.setRow(row++);
+  oled.setCol(1);
+  unsigned int actualBaseline = ccs811.getBaseline();     
+  oled.print(actualBaseline, DEC);
+  oled.clearToEOL ();
+
+  oled.setRow(row++);
+  oled.setCol(1);
+  oled.print("Ulozena hodnota:");
+  oled.clearToEOL ();
+
+  oled.setRow(row++);
+  oled.setCol(1);     
+  oled.print(baseline, DEC);
   oled.clearToEOL ();
 }

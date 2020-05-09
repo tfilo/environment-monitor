@@ -3,8 +3,16 @@ void loop() {
   lastButton = NO_BTN;
   
   if (status == WAKED_BY_CSS || status == WAKED) {
+    if (counter < 25) { // 25 minute
+      counter++;
+    }
     takeMeasurements();
-    status = WAKED_BY_USER;
+    if (status == WAKED) {
+      status = WAKED_BY_USER;
+    }
+    if (status == WAKED_BY_USER) {
+      readBattery(); // read battery only when waked by user  
+    }
   }
 
   if (status == WAKED_BY_USER) {
@@ -32,24 +40,33 @@ void loop() {
       case ALTITUDE_SETUP_SCREEN:
         altitudeScreen();
         break;
+      case BASELINE_SETUP_SCREEN:
+        baselineScreen();
+        break;
     }
 
   }
 
-  if (counter >= 60) { // cca every hour
-    counter = 0;
-    ccs.setEnvironmentalData((uint8_t)latest.humidity, (double)latest.temperature);
+  if (counter == 25) { // cca 25 minute to warm up sensor
     measuringTVOC = true;
-    readBattery();
-  } else {
-    counter++;
+    counter = 1000; // just to never run again
+    if (baseline > 0) {
+      CCS811Core::CCS811_Status_e errorStatus = ccs811.setBaseline(baseline); // restore baseline after reset
+      if (errorStatus != CCS811Core::CCS811_Stat_SUCCESS) {
+        Serial.print("Error writing baseline: ");
+        Serial.println(ccs811.statusString(errorStatus));
+      } 
+    }
   }
   
-  delay(1);
-  
   if ((millis() - lastBtnPress) < sleepAfter) {
-    LowPower.powerDown(SLEEP_60MS, ADC_OFF, BOD_OFF);
+    LowPower.powerDown(SLEEP_15MS, ADC_OFF, BOD_OFF);
   } else {
-    putToSleep();
+    oled.ssd1306WriteCmd(0xAE); // turn off oled
+    LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
+    if (status == WAKED_BY_USER) {
+      initOled();
+    }
+    lastButton = NO_BTN; // after waking up by any button don't do action
   }
 }

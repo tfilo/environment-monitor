@@ -11,15 +11,15 @@ void setup() {
 
   readBattery();
 
-  if (!ccs.begin()) {
-    oled.println("CCS811 failed!");
-    while (1);
-  }
-  ccs.enableInterrupt();
-  oled.println("CCS811 ok");
-
-  ccs.setDriveMode(CCS811_DRIVE_MODE_60SEC);
-  oled.println("CCS811 drive mode ok");
+  CCS811Core::CCS811_Status_e returnCode = ccs811.beginWithStatus();
+  oled.print("INIT: ");
+  oled.println(ccs811.statusString(returnCode));
+  returnCode = ccs811.setDriveMode(CCS811_DRIVE_MODE_60SEC);
+  oled.print("MODE: ");
+  oled.println(ccs811.statusString(returnCode));
+  returnCode = ccs811.enableInterrupts();
+  oled.print("INTE: ");
+  oled.println(ccs811.statusString(returnCode));
 
   if (!si.begin()) {
     oled.println("Si7021 failed!");
@@ -97,4 +97,13 @@ void loadEEPROMvariables() {
   if ((32767 ^ altitude) != altitudeCheck) {
     altitude = DEFAULT_ALTITUDE;
   }
+
+  unsigned int baselineCheck;
+  EEPROM.get(BASELINE_EEPROM_ADDR, baseline);
+  EEPROM.get(BASELINE_EEPROM_ADDR + 2, baselineCheck);
+
+  if ((65535 ^ baseline) != baselineCheck) {
+    baseline = 0;
+  }
+  
 }

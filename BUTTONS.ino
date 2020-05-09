@@ -22,6 +22,10 @@ void handleSetButton() {
         actualScreen = ALTITUDE_SETUP_SCREEN;
         screenPosition = POSITION_DEFAULT;
         break;
+      case MENU_BASELINE_POSITION:
+        actualScreen = BASELINE_SETUP_SCREEN;
+        screenPosition = POSITION_DEFAULT;
+        break;
       case MENU_EXIT_POSITION:
         actualScreen = MAIN_SCREEN;
         screenPosition = POSITION_DEFAULT;
@@ -73,6 +77,12 @@ void handleSetButton() {
     }
     return;
   }
+
+  if (actualScreen == BASELINE_SETUP_SCREEN) {
+    actualScreen = MENU_SCREEN;
+    screenPosition = POSITION_DEFAULT;
+    return;
+  }
 }
 
 void handleUpButton() {
@@ -93,7 +103,6 @@ void handleUpButton() {
     }
     return;
   }
-
 
   if (actualScreen == ALTITUDE_SETUP_SCREEN) {
     short step = 1;
@@ -117,6 +126,14 @@ void handleUpButton() {
     } else {
       altitudeSetting+=step;
     }
+    return;
+  }
+
+  if (actualScreen == BASELINE_SETUP_SCREEN) {
+    unsigned int actualBaseline = ccs811.getBaseline();
+    EEPROM.put(BASELINE_EEPROM_ADDR, actualBaseline);
+    EEPROM.put(BASELINE_EEPROM_ADDR + 2, 65535 ^ actualBaseline);
+    baseline = actualBaseline;
     return;
   }
 }
@@ -161,6 +178,16 @@ void handleDownButton() {
       altitudeSetting += step * 9;
     } else {
       altitudeSetting-=step;
+    }
+    return;
+  }
+
+  if (actualScreen == BASELINE_SETUP_SCREEN) {
+    CCS811Core::CCS811_Status_e errorStatus = ccs811.setBaseline(baseline);
+
+    if (errorStatus != CCS811Core::CCS811_Stat_SUCCESS) {
+      Serial.print("Error writing baseline: ");
+      Serial.println(ccs811.statusString(errorStatus));
     }
     return;
   }
