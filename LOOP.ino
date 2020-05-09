@@ -49,7 +49,7 @@ void loop() {
 
   if (counter == 25) { // cca 25 minute to warm up sensor
     measuringTVOC = true;
-    counter = 1000; // just to never run again
+    counter = 255; // just to never run again
     if (baseline > 0) {
       CCS811Core::CCS811_Status_e errorStatus = ccs811.setBaseline(baseline); // restore baseline after reset
       if (errorStatus != CCS811Core::CCS811_Stat_SUCCESS) {
