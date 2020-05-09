@@ -56,12 +56,14 @@ void mainScreen() {
   oled.print("hPa");
   oled.clearToEOL ();
 
-  oled.setRow(row++);
-  oled.setCol(1);
-  oled.print("Bateria: ");
-  oled.print(voltage,1);
-  oled.print("V");
-  oled.clearToEOL ();
+  if (voltage > 1) {
+    oled.setRow(row++);
+    oled.setCol(1);
+    oled.print("Bateria: ");
+    oled.print(voltage,1);
+    oled.print("V");
+    oled.clearToEOL ();
+  }
 }
 
 void menuScreen() {

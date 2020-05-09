@@ -38,11 +38,6 @@ void loop() {
 
   if (counter >= 60) { // cca every hour
     counter = 0;
-    Serial.print("Updating enviromental data to ");
-    Serial.print((uint8_t)latest.humidity);
-    Serial.print("%, ");
-    Serial.print((double)latest.temperature);
-    Serial.println("C");
     ccs.setEnvironmentalData((uint8_t)latest.humidity, (double)latest.temperature);
     measuringTVOC = true;
     readBattery();

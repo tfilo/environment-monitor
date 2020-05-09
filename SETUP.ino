@@ -12,7 +12,6 @@ void setup() {
   readBattery();
 
   if (!ccs.begin()) {
-    Serial.println("CCS811 failed!");
     oled.println("CCS811 failed!");
     while (1);
   }
@@ -23,19 +22,23 @@ void setup() {
   oled.println("CCS811 drive mode ok");
 
   if (!si.begin()) {
-    Serial.println("Si7021 failed!");
     oled.println("Si7021 failed!");
     while (1);
   }
   oled.println("Si7021 ok");
 
-  if (!bmp280.initialize()) {
-    Serial.println("BMP280 failed!");
+  if (!bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID)) {
     oled.println("BMP280 failed!");
     while (1);
   }
 
-  bmp280.setEnabled(0);
+  /* Default settings from datasheet. */
+  bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                  Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                  Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                  Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                  Adafruit_BMP280::STANDBY_MS_4000); /* Standby time. */
+
   oled.println("BMP280 ok");
 
   delay(3000);

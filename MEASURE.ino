@@ -1,4 +1,4 @@
-void takeMeasurements() {
+void takeMeasurements() { 
   latest.humidity = si.readHumidity();
   
   if (ccs.available()) {
@@ -8,13 +8,9 @@ void takeMeasurements() {
     }
   }
 
-  bmp280.triggerMeasurement();
-  bmp280.awaitMeasurement();
-  bmp280.getTemperature(temperature);
-  bmp280.getPressure(pressure);
-  latest.temperature = temperature;
-  latest.pressure = (pressure / 100) / pow(1.0 - (altitude / 44330.0), 5.255);
-    
+  latest.temperature = bmp.readTemperature();
+  latest.pressure = bmp.seaLevelForAltitude(altitude, bmp.readPressure() / 100.0F);
+
   printToSerial();
 }
 
@@ -24,4 +20,5 @@ void readBattery() {
   int voltageValue = analogRead(A0);
   voltage = (voltageValue * (3.3 / 1023.0)) * 2.0;
   ADCSRA = 0; // put ADC to sleep, save around 0.250mA
+  
 }
