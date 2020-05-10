@@ -1,14 +1,31 @@
 void printToSerial() {
-  Serial.print("eco2=");
-  Serial.print(latest.eco2, 2);
-  Serial.print(";tvoc=");
-  Serial.print(latest.tvoc, 2);
-  Serial.print(";temperature=");
-  Serial.print(latest.temperature, 2);
-  Serial.print(";humidity=");
-  Serial.print(latest.humidity, 2);
-  Serial.print(";pressure=");
-  Serial.println(latest.pressure, 2);
+  if (measuringTVOC) { // submit data after 30 minutus when CCS811 is warmed up
+    if (latest.eco2!=DEFAULT_DATA_VALUE) {
+      Serial.print("eco2=");
+      Serial.print(latest.eco2, 2);
+      Serial.print(";");
+    }
+    if (latest.tvoc!=DEFAULT_DATA_VALUE) {
+      Serial.print("tvoc=");
+      Serial.print(latest.tvoc, 2);
+      Serial.print(";");
+    }
+  }
+  if (latest.temperature!=DEFAULT_DATA_VALUE) {
+    Serial.print("temperature=");
+    Serial.print(latest.temperature, 2);
+    Serial.print(";");
+  }
+  if (latest.humidity!=DEFAULT_DATA_VALUE) {
+    Serial.print("humidity=");
+    Serial.print(latest.humidity, 2);
+    Serial.print(";");
+  }
+  if (latest.pressure!=DEFAULT_DATA_VALUE) {
+    Serial.print("pressure=");
+    Serial.print(latest.pressure, 2);
+  }
+  Serial.println();
 }
 
 void printSensorError()

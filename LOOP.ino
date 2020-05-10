@@ -3,7 +3,7 @@ void loop() {
   lastButton = NO_BTN;
   
   if (status == WAKED_BY_CSS || status == WAKED) {
-    if (counter < 25) { // 25 minute
+    if (counter < CYCLES_TO_WAIT_BEFORE_MEASSURE) { // 30 minute
       counter++;
     }
     takeMeasurements();
@@ -47,7 +47,7 @@ void loop() {
 
   }
 
-  if (counter == 25) { // cca 25 minute to warm up sensor
+  if (counter == CYCLES_TO_WAIT_BEFORE_MEASSURE) { // cca 30 minute to warm up sensor
     measuringTVOC = true;
     counter = 255; // just to never run again
     if (baseline > 0) {

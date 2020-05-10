@@ -5,14 +5,13 @@ void takeMeasurements() {
   
   if (ccs811.dataAvailable()) {
     ccs811.readAlgorithmResults();
-    if (measuringTVOC) { // start measuring after first loop (cca 20min) of counter because sensor neet time to stabilise
-      latest.eco2 = ccs811.getCO2();
-      latest.tvoc = ccs811.getTVOC();
-    }
+    latest.eco2 = ccs811.getCO2();
+    latest.tvoc = ccs811.getTVOC();
     ccs811.setEnvironmentalData(latest.humidity, latest.temperature);
   } else if (ccs811.checkForStatusError()) {
     printSensorError();  
   }
+
   printToSerial();
 }
 

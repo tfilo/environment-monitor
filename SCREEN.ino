@@ -3,7 +3,11 @@ void mainScreen() {
 
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("eCO2:    ");
+  if (measuringTVOC) {
+    oled.print("eCO2:    ");
+  } else {
+    oled.print("! eCO2:  ");  
+  }
   if (latest.eco2 != DEFAULT_DATA_VALUE) {
     oled.print(latest.eco2);
   } else {
@@ -14,7 +18,11 @@ void mainScreen() {
 
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("TVOC:    ");
+  if (measuringTVOC) {
+    oled.print("TVOC:    ");
+  } else {
+    oled.print("! TVOC:  ");
+  }
   if (latest.tvoc != DEFAULT_DATA_VALUE) {
     oled.print(latest.tvoc);
   } else {
@@ -63,14 +71,7 @@ void mainScreen() {
     oled.print(voltage,1);
     oled.print("V");
     oled.clearToEOL ();
-  }
-  /* 
-    oled.setRow(row++);
-    oled.setCol(1);
-    oled.print("ms: ");
-    oled.print(millis());
-    oled.clearToEOL ();
-  */   
+  }  
 }
 
 void menuScreen() {
