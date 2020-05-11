@@ -3,16 +3,13 @@ void loop() {
   lastButton = NO_BTN;
   
   if (status == WAKED_BY_CSS || status == WAKED) {
-    if (counter < CYCLES_TO_WAIT_BEFORE_MEASSURE) { // 30 minute
+    if (counter < CYCLES_TO_WAIT_BEFORE_MEASSURE) { // first X (60s long) cycles of CSS811 increment counter
       counter++;
     }
-    takeMeasurements();
     if (status == WAKED) {
       status = WAKED_BY_USER;
     }
-    if (status == WAKED_BY_USER) {
-      readBattery(); // read battery only when waked by user  
-    }
+    takeMeasurements();
   }
 
   if (status == WAKED_BY_USER) {
@@ -44,7 +41,6 @@ void loop() {
         baselineScreen();
         break;
     }
-
   }
 
   if (counter == CYCLES_TO_WAIT_BEFORE_MEASSURE) { // cca 30 minute to warm up sensor
@@ -53,7 +49,7 @@ void loop() {
     if (baseline > 0) {
       CCS811Core::CCS811_Status_e errorStatus = ccs811.setBaseline(baseline); // restore baseline after reset
       if (errorStatus != CCS811Core::CCS811_Stat_SUCCESS) {
-        Serial.print("Error writing baseline: ");
+        Serial.print("ERROR;writing_baseline;");
         Serial.println(ccs811.statusString(errorStatus));
       } 
     }
@@ -66,6 +62,7 @@ void loop() {
     LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
     if (status == WAKED_BY_USER) {
       initOled();
+      readBattery(); // read battery only when waked by user
     }
     lastButton = NO_BTN; // after waking up by any button don't do action
   }

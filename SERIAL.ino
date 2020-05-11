@@ -33,11 +33,12 @@ void printSensorError()
   uint8_t error = ccs811.getErrorRegister();
   if (error == 0xFF) //comm error
   {
+    Serial.print("ERROR;read_register;");
     Serial.println("Failed to get ERROR_ID register.");
   }
   else
   {
-    Serial.print("Error: ");
+    Serial.print("ERROR;sensor_error;");
     if (error & 1 << 5)
       Serial.print("HeaterSupply");
     if (error & 1 << 4)

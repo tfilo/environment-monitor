@@ -12,14 +12,14 @@
 #include "SSD1306AsciiAvrI2c.h"
 
 // CONSTANTS
-#define DEFAULT_DATA_VALUE -1000.0F
-#define CYCLES_TO_WAIT_BEFORE_MEASSURE 30
+#define DEFAULT_DATA_VALUE -1000.0F           // Just dummy value to know when variable is not measured yet
+#define CYCLES_TO_WAIT_BEFORE_MEASSURE 30     // How many 60s long cycles to wait before restoring baseline and start submitting TVOC and eCO2
 
 #define OLED_I2C_ADDRESS 0x3C
 #define CCS811_ADDR 0x5A
 #define DEFAULT_ALTITUDE 425
-#define DEFAULT_SLEEP 30000
-#define CCS811_DRIVE_MODE_60SEC 0x03
+#define DEFAULT_SLEEP 15000
+#define CCS811_DRIVE_MODE_60SEC 0x03          // Measure every 60seconds
 
 #define CSS_INTERRUPT_PIN 2
 #define BTN_INTERRUPT_PIN 3
@@ -61,22 +61,20 @@ Adafruit_BMP280 bmp;
 SSD1306AsciiAvrI2c oled;
 
 // VARIABLES
-byte counter = 0;
-bool measuringTVOC = false;
+byte counter = 0; // used for counting first X cycles before restoring baseline
+bool measuringTVOC = false; // true after first X cycles
 byte status = WAKED_BY_USER;
 unsigned long lastBtnPress = 0; // time in ms
 unsigned char lastButton = 0; // number of button
 unsigned int sleepAfter;
 short altitude;
-short altitudeSetting;
+short altitudeSetting; // used in setting menu whne adjusting altitute before it is set to main variable
 unsigned char actualScreen = 0; // actual screen where we are
 unsigned char screenPosition = 0; // position in actual screen
 float voltage = 0;
-unsigned int baseline;
+unsigned int baseline; // CCS811 baseline
 
-float temperature, pressure, altitudeMeasure; 
-
-struct data
+struct data // structure to measure all variables
 {
   float temperature;
   float humidity;
@@ -86,4 +84,4 @@ struct data
 };
 typedef struct data Data;
 
-Data latest;
+Data latest; // variable latest of data structure

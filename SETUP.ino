@@ -8,7 +8,6 @@ void setup() {
   Serial.begin(115200);
 
   initOled();
-
   readBattery();
 
   CCS811Core::CCS811_Status_e returnCode = ccs811.beginWithStatus();

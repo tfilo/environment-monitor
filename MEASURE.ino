@@ -1,6 +1,6 @@
 void takeMeasurements() { 
   latest.humidity = si.readHumidity();
-  latest.temperature = bmp.readTemperature() - 1.5f;
+  latest.temperature = bmp.readTemperature() - 1.5f; // offset because of self heating, temporary until I get DS18B20 one wire
   latest.pressure = bmp.seaLevelForAltitude(altitude, bmp.readPressure() / 100.0F);
   
   if (ccs811.dataAvailable()) {
@@ -21,5 +21,4 @@ void readBattery() {
   int voltageValue = analogRead(A0);
   voltage = (voltageValue * (3.3 / 1023.0)) * 2.0;
   ADCSRA = 0; // put ADC to sleep, save around 0.250mA
-  
 }

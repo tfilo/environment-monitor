@@ -33,7 +33,7 @@ void mainScreen() {
 
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("Teplota: ");
+  oled.print("Teplota: "); // Temperature
   if (latest.temperature != DEFAULT_DATA_VALUE) {
     oled.print(latest.temperature, 1);
   } else {
@@ -44,7 +44,7 @@ void mainScreen() {
 
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("Vlhkost: ");
+  oled.print("Vlhkost: "); // Humidity
   if (latest.humidity != DEFAULT_DATA_VALUE) {
     oled.print(latest.humidity);
   } else {
@@ -55,7 +55,7 @@ void mainScreen() {
 
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("Tlak:    ");
+  oled.print("Tlak:    "); // Pressure
   if (latest.pressure != DEFAULT_DATA_VALUE) {
     oled.print(latest.pressure, 1);
   } else {
@@ -64,10 +64,10 @@ void mainScreen() {
   oled.print("hPa");
   oled.clearToEOL ();
 
-  if (voltage > 1) {
+  if (voltage > 1) { // if connected
     oled.setRow(row++);
     oled.setCol(1);
-    oled.print("Bateria: ");
+    oled.print("Bateria: "); // Battery
     oled.print(voltage,1);
     oled.print("V");
     oled.clearToEOL ();
@@ -88,7 +88,7 @@ void menuScreen() {
   } else {
     oled.print(" ");
   }
-  oled.print("Usporny rezim");
+  oled.print("Usporny rezim"); // Sleep mode
   oled.clearToEOL ();
 
   oled.setRow(row++);
@@ -98,7 +98,7 @@ void menuScreen() {
   } else {
     oled.print(" ");
   }
-  oled.print("Nadmorska vyska");
+  oled.print("Nadmorska vyska"); // Altitude
   oled.clearToEOL ();
 
   oled.setRow(row++);
@@ -125,7 +125,7 @@ void menuScreen() {
 void sleepScreen() {
   oled.setRow(1);
   oled.setCol(1);
-  oled.print("Usporny rezim");
+  oled.print("Usporny rezim"); // Sleep mode
   oled.clearToEOL ();
 
   oled.setRow(3);
@@ -141,13 +141,13 @@ void altitudeScreen() {
 
   oled.setRow(1);
   oled.setCol(1);
-  oled.print("Nadmorska vyska");
+  oled.print("Nadmorska vyska"); // Altitude
   oled.clearToEOL ();
 
   oled.setRow(3);
   oled.setCol(1);
   oled.print(altitudeString);
-  oled.print("m.n.m.");
+  oled.print("m.n.m."); // m a.s.l.
   oled.clearToEOL ();
 
   oled.setRow(4);
@@ -178,12 +178,12 @@ void baselineScreen() {
 
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("H:uloz, D:obnov");
+  oled.print("H:uloz, D:obnov"); // Up btn to save, Down btn to restore
   oled.clearToEOL ();
   
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("Aktualna hodnota:");
+  oled.print("Aktualna hodnota:"); // Actual value
   oled.clearToEOL ();
   
   oled.setRow(row++);
@@ -194,7 +194,7 @@ void baselineScreen() {
 
   oled.setRow(row++);
   oled.setCol(1);
-  oled.print("Ulozena hodnota:");
+  oled.print("Ulozena hodnota:"); // Saved value
   oled.clearToEOL ();
 
   oled.setRow(row++);

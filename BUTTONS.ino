@@ -54,7 +54,7 @@ void handleSetButton() {
         break;
     }
     EEPROM.write(SLEEP_EEPROM_ADDR, sleepByte);
-    EEPROM.write(SLEEP_EEPROM_ADDR + 1, 255 ^ sleepByte);
+    EEPROM.write(SLEEP_EEPROM_ADDR + 1, 255 ^ sleepByte); //Sleep XOR value used as checksum.
     actualScreen = MENU_SCREEN;
     screenPosition = POSITION_DEFAULT;
     return;
@@ -70,7 +70,7 @@ void handleSetButton() {
       case ALTITUDE_UNITS_POSSITION:
         altitude = altitudeSetting;
         EEPROM.put(ALTITUDE_EEPROM_ADDR, altitude);
-        EEPROM.put(ALTITUDE_EEPROM_ADDR + 2, 32767 ^ altitude);
+        EEPROM.put(ALTITUDE_EEPROM_ADDR + 2, 32767 ^ altitude); // Altitude XOR value used as checksum.
         actualScreen = MENU_SCREEN;
         screenPosition = POSITION_DEFAULT;
         break;
@@ -132,7 +132,7 @@ void handleUpButton() {
   if (actualScreen == BASELINE_SETUP_SCREEN) {
     unsigned int actualBaseline = ccs811.getBaseline();
     EEPROM.put(BASELINE_EEPROM_ADDR, actualBaseline);
-    EEPROM.put(BASELINE_EEPROM_ADDR + 2, 65535 ^ actualBaseline);
+    EEPROM.put(BASELINE_EEPROM_ADDR + 2, 65535 ^ actualBaseline); // Baseline XOR value used as checksum
     baseline = actualBaseline;
     return;
   }
@@ -186,13 +186,13 @@ void handleDownButton() {
     CCS811Core::CCS811_Status_e errorStatus = ccs811.setBaseline(baseline);
 
     if (errorStatus != CCS811Core::CCS811_Stat_SUCCESS) {
-      Serial.print("Error writing baseline: ");
+      Serial.print("ERROR;writing_baseline;");
       Serial.println(ccs811.statusString(errorStatus));
     }
     return;
   }
 }
 
-byte getDigit(int num, int step) {
+byte getDigit(int num, int step) { // Get digit on thousands, hundreds, tens, ones position as needed for altitude setting menu.
   return (num / step) % 10;
 }
