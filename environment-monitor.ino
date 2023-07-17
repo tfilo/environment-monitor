@@ -1,15 +1,17 @@
 #define F_CPU 8000000L
-#include "Wire.h"
-#include "SPI.h"
-#include "LowPower.h"
-#include "EEPROM.h"
+#include <Wire.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <SPI.h>
+#include <LowPower.h>
+#include <EEPROM.h>
 
-#include "SparkFunCCS811.h"
-#include "Adafruit_BMP280.h"
-#include "Adafruit_Si7021.h"
+#include <SparkFunCCS811.h>
+#include <Adafruit_BMP280.h>
+#include <Adafruit_Si7021.h>
 
-#include "SSD1306Ascii.h"
-#include "SSD1306AsciiAvrI2c.h"
+#include <SSD1306Ascii.h>
+#include <SSD1306AsciiAvrI2c.h>
 
 // CONSTANTS
 #define DEFAULT_DATA_VALUE -1000.0F           // Just dummy value to know when variable is not measured yet
@@ -28,6 +30,8 @@
 #define WAKED_BY_CSS 2
 #define WAKED 3
 
+#define ONE_WIRE_BUS_PIN 9
+
 #define BTN_SET 7
 #define BTN_UP 6
 #define BTN_DOWN 5
@@ -43,7 +47,8 @@
 #define MENU_SLEEP_POSITION 0
 #define MENU_ALTITUDE_POSITION 1
 #define MENU_BASELINE_POSITION 2
-#define MENU_EXIT_POSITION 3
+#define MENU_HEATER_SI7021_POSITION 3
+#define MENU_EXIT_POSITION 4
 
 #define ALTITUDE_THOUSAND_POSSITION 0
 #define ALTITUDE_HUNDRED_POSSITION 1
@@ -59,6 +64,8 @@ CCS811 ccs811(CCS811_ADDR);
 Adafruit_Si7021 si = Adafruit_Si7021();
 Adafruit_BMP280 bmp;
 SSD1306AsciiAvrI2c oled;
+OneWire oneWire(ONE_WIRE_BUS_PIN);
+DallasTemperature tempSensor(&oneWire);
 
 // VARIABLES
 byte counter = 0; // used for counting first X cycles before restoring baseline

@@ -31,8 +31,12 @@ void setup() {
     while (1);
   }
 
+  tempSensor.begin();
+  oled.print("DS18B20 count:");
+  oled.println(tempSensor.getDeviceCount(), DEC);
+
   /* Default settings from datasheet. */
-  bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+  bmp.setSampling(Adafruit_BMP280::MODE_FORCED,     /* Operating Mode. */
                   Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
                   Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
                   Adafruit_BMP280::FILTER_X16,      /* Filtering. */

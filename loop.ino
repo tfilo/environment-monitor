@@ -59,6 +59,9 @@ void loop() {
     LowPower.powerDown(SLEEP_15MS, ADC_OFF, BOD_OFF);
   } else {
     oled.ssd1306WriteCmd(0xAE); // turn off oled
+    if (si.isHeaterEnabled()) { // disable heater
+      si.heater(false);
+    }
     LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
     if (status == WAKED_BY_USER) {
       initOled();

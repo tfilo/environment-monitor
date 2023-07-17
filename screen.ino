@@ -35,7 +35,7 @@ void mainScreen() {
   oled.setCol(1);
   oled.print("Teplota: "); // Temperature
   if (latest.temperature != DEFAULT_DATA_VALUE) {
-    oled.print(latest.temperature, 1);
+    oled.print(latest.temperature, 2);
   } else {
     oled.print("--");  
   }
@@ -68,7 +68,7 @@ void mainScreen() {
     oled.setRow(row++);
     oled.setCol(1);
     oled.print("Bateria: "); // Battery
-    oled.print(voltage,1);
+    oled.print(voltage,2);
     oled.print("V");
     oled.clearToEOL ();
   }  
@@ -109,6 +109,21 @@ void menuScreen() {
     oled.print(" ");
   }
   oled.print("CCS811 Baseline");
+  oled.clearToEOL ();
+
+  oled.setRow(row++);
+  oled.setCol(1);
+  if (screenPosition == MENU_HEATER_SI7021_POSITION) {
+    oled.print("*");
+  } else {
+    oled.print(" ");
+  }
+  oled.print("SI7021 Heater ");
+  if (si.isHeaterEnabled()) {
+    oled.print("ON");
+  } else {
+    oled.print("OFF");
+  }
   oled.clearToEOL ();
 
   oled.setRow(row++);

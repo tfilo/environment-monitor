@@ -26,6 +26,14 @@ void handleSetButton() {
         actualScreen = BASELINE_SETUP_SCREEN;
         screenPosition = POSITION_DEFAULT;
         break;
+      case MENU_HEATER_SI7021_POSITION:
+        if (si.isHeaterEnabled()) {
+          si.heater(false);
+        } else {
+          si.setHeatLevel(SI_HEATLEVEL_MEDIUM);
+          si.heater(true);
+        }
+        break;
       case MENU_EXIT_POSITION:
         actualScreen = MAIN_SCREEN;
         screenPosition = POSITION_DEFAULT;
